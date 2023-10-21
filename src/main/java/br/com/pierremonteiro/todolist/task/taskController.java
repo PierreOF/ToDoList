@@ -45,7 +45,7 @@ public class taskController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity uptade(@RequestBody TaskModel taskModel, HttpServletRequest request, @PathVariable UUID id){
+    public ResponseEntity update(@RequestBody TaskModel taskModel, HttpServletRequest request, @PathVariable UUID id){
 
         var idUser = request.getAttribute("idUser");
 
@@ -66,6 +66,23 @@ public class taskController {
 
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity remove(HttpServletRequest request , @PathVariable UUID id){
+
+        var idUser = request.getAttribute("idUser");
+        var task = this.taskRepository.findById(id).orElse(null);
+
+        if(task == null){
+            return ResponseEntity.badRequest().body("Esta tarefa não existe");
+        }
+        if(!task.getIdUser().equals(idUser)){
+            return  ResponseEntity.badRequest().body("Usuario sem permissão para remover");
+        }
+
+        this.taskRepository.delete(task);
+
+        return ResponseEntity.ok().body("Tarefa deletada com sucesso!");
+    }
 }
 
 

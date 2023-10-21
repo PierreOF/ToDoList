@@ -19,7 +19,7 @@ public class UserController {
     private IUserRepository userRepository;
 
     @PostMapping("/")
-    public ResponseEntity creeate(@RequestBody UserModel userModel){
+    public ResponseEntity create(@RequestBody UserModel userModel){
         var user = this.userRepository.findByUsername(userModel.getUsername());
         if(user != null){
             System.out.println("Usuário já existe");
